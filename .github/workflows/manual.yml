@@ -1,0 +1,23 @@
+name: Manual build
+
+on: [workflow_dispatch]
+
+jobs:
+
+  debian-rt-example-image:
+    name: Debian RT example image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Free Disk Space
+        uses: ./.github/workflows/free-disk-space
+      - name: Build image
+        run: ./kas-container build kas-iot2050-example.yml:kas/opt/preempt-rt.yml
+      - name: Upload image
+        uses: actions/upload-artifact@v2
+        with:
+          name: iot2050-example-image-rt
+          path: |
+            build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img
+            build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img.bmap
